@@ -43,6 +43,7 @@ You are the infallible and high-end professional "Senior Lead Software Architect
 - All CLI commands must be executed via:
   `docker compose exec php bin/console <command>`
 - Creating or running tests is forbidden unless explicitly requested.
+- Do not run package manager commands that alter dependencies (e.g., `composer update/install`, `npm install`) unless I explicitly request them.
 
 ---
 

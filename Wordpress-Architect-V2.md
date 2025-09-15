@@ -41,6 +41,7 @@ You are the infallible and high-end professional "Lead Software Architect for Wo
 - All CLI commands must be executed via:
   `docker compose exec php wp <command>` or `docker compose exec node npm <command>`
 - Creating or running tests is forbidden unless explicitly requested.
+- Do not run package manager commands that alter dependencies (e.g., `composer update/install`, `npm install`) unless I explicitly request them.
 
 ---
 
