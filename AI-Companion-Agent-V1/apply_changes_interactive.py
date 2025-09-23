@@ -3,19 +3,12 @@
 
 """
 AI Companion Output Interpreter (Interactive & Secure)
-Version 2.0
+Version 2.4
 
 This script runs continuously, waiting for structured command blocks to be
-pasted into the terminal. It applies file operations safely within the project
-directory, preventing any changes outside of it or within the .git folder.
+pasted into the terminal. It uses a robust, simple, line-based parser to
+strip markdown code fences before applying file operations.
 
-Usage:
-1. Run this script from the root of your project: `python apply_changes_interactive.py`
-2. The script will prompt you to paste content.
-3. Copy the entire multi-line output from the AI Companion.
-4. Paste it into the terminal.
-5. Press Ctrl+D (on macOS/Linux) or Ctrl+Z then Enter (on Windows) to submit.
-6. The script will process the commands and wait for the next input.
 """
 
 import re
@@ -24,29 +17,53 @@ import sys
 from pathlib import Path
 
 
+def strip_markdown_fence(text: str) -> str:
+    """
+    Strips markdown code fences using a simple and robust line-based search algorithm.
+    """
+    lines = text.splitlines()
+
+    start_index = -1
+    end_index = -1
+
+    # Find the first line that starts with ``` (e.g., ``` or ```php)
+    for i, line in enumerate(lines):
+        if line.strip().startswith("```"):
+            start_index = i
+            break
+
+    # If no starting fence is found, return the original text
+    if start_index == -1:
+        return text
+
+    # Find the last line that is exactly ```
+    # We search backwards from the end of the list.
+    for i in range(len(lines) - 1, start_index, -1):
+        if lines[i].strip() == "```":
+            end_index = i
+            break
+
+    # If a valid start and end fence are found, extract the content
+    if end_index > start_index:
+        print(f"  -> INFO: Markdown code fence detected and stripped.")
+        content_lines = lines[start_index + 1:end_index]
+        return "\n".join(content_lines)
+
+    # If anything is unclear, return the original text to be safe
+    return text
+
+
 def is_path_safe(path_to_check: Path, project_root: Path) -> bool:
     """
     Ensures that the path is safely within the project root and not in .git.
     This is a critical security sandbox.
     """
     try:
-        # Resolve the path to its absolute, canonical form.
-        # This prevents tricks with symlinks or ".." components.
         resolved_path = (project_root / path_to_check).resolve()
-        
-        # 1. THE CRITICAL CHECK: Is the resolved path still inside the project root?
-        # Python 3.9+ has `is_relative_to`, which is perfect for this.
-        if not resolved_path.is_relative_to(project_root):
-            return False
-            
-        # 2. THE .GIT CHECK: Is '.git' a component of the path?
-        if '.git' in resolved_path.parts:
-            return False
-            
+        if not resolved_path.is_relative_to(project_root): return False
+        if '.git' in resolved_path.parts: return False
     except Exception:
-        # Any resolution error means the path is suspicious or invalid.
         return False
-        
     return True
 
 
@@ -87,13 +104,11 @@ def handle_patch(file_path: Path, patch_content: str) -> None:
             input=patch_content, text=True, check=True, capture_output=True
         )
         print(f"  -> SUCCESS: Patch applied.")
-        if result.stdout:
-            print("     " + result.stdout.strip().replace('\n', '\n     '))
+        if result.stdout: print("     " + result.stdout.strip().replace('\n', '\n     '))
     except FileNotFoundError:
         print("  -> ERROR: The 'patch' command was not found.", file=sys.stderr)
     except subprocess.CalledProcessError as e:
         print(f"  -> ERROR: Patch could not be applied cleanly.", file=sys.stderr)
-        print("     Reason: The local file has likely changed.", file=sys.stderr)
         print("     Details: " + e.stderr.strip().replace('\n', '\n     '), file=sys.stderr)
 
 
@@ -116,14 +131,15 @@ def process_input(content: str, project_root: Path) -> None:
         command, path_str, content = match.groups()
         file_path_relative = Path(path_str.strip())
 
-        # --- SECURITY SANDBOX CHECK ---
         if not is_path_safe(file_path_relative, project_root):
-            print(f"[SECURITY] DANGEROUS PATH DETECTED! Skipping operation for '{file_path_relative}'.", file=sys.stderr)
-            print(f"           Reason: Path is outside the project directory or targets the .git folder.", file=sys.stderr)
+            print(f"[SECURITY] DANGEROUS PATH! Skipping '{file_path_relative}'.", file=sys.stderr)
             continue
-        
-        content = content.strip() if content else ""
-        
+
+        content = content if content else ""
+
+        # Use the new, robust, line-based stripping function
+        content = strip_markdown_fence(content)
+
         if command == 'START-FILE':
             handle_create_or_replace(file_path_relative, content, "CREATE")
         elif command == 'START-REPLACE-FILE':
@@ -132,13 +148,13 @@ def process_input(content: str, project_root: Path) -> None:
             handle_patch(file_path_relative, content)
         elif command == 'DELETE-FILE':
             handle_delete(file_path_relative)
-    
+
     print(f"\nProcessing complete.")
 
 
 def main() -> None:
     """Main execution loop."""
-    print("--- AI Companion Output Interpreter (Interactive & Secure) v2.0 ---")
+    print("--- AI Companion Output Interpreter (Interactive & Secure) v2.4 ---")
     project_root = Path.cwd().resolve()
     print(f"Project root locked to: {project_root}")
     print("-" * 60)
