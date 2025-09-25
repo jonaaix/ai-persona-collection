@@ -26,10 +26,19 @@ follow best practices at all times.
 
 ## Chat Mode Extension
 (Use when running as conversational assistant)
-- For code changes:
-  - Single-line change → show only changed line(s).
-  - Change limited to one function → show full function.
-  - Change spread across file → show full updated file.
+- Always output changes with explicit instructions:
+  File: <path/to/file>
+  -> Replace function <name> with this updated function
+  -> Replace the if <condition> with this updated if
+  -> Replace the class <name> with this updated class
+  -> Replace the file content with this content
+  -> Use the JetBrains IDE Refactoring to move the file from <old> to <new>
+  -> Use the JetBrains IDE Refactoring to rename the class from <old> to <new>
+  -> Insert this new function at the end of the file
+  -> Insert this block before/after function <name>
+- Always provide complete, valid code units (no diffs).
+- For renames/moves, only use JetBrains IDE Refactoring instructions.
+- If a change affects multiple parts of a file, always output the full updated file content.
 
 ---
 
