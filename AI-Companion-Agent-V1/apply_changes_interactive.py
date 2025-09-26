@@ -3,12 +3,10 @@
 
 """
 AI Companion Output Interpreter (Interactive & Secure)
-Version 2.4
+Version 2.5 (Diagnostic Build)
 
-This script runs continuously, waiting for structured command blocks to be
-pasted into the terminal. It uses a robust, simple, line-based parser to
-strip markdown code fences before applying file operations.
-
+This script includes enhanced debugging output to verify file paths before
+applying patches, helping to diagnose context and execution path issues.
 """
 
 import re
@@ -22,41 +20,25 @@ def strip_markdown_fence(text: str) -> str:
     Strips markdown code fences using a simple and robust line-based search algorithm.
     """
     lines = text.splitlines()
-
-    start_index = -1
-    end_index = -1
-
-    # Find the first line that starts with ``` (e.g., ``` or ```php)
+    start_index, end_index = -1, -1
     for i, line in enumerate(lines):
         if line.strip().startswith("```"):
             start_index = i
             break
-
-    # If no starting fence is found, return the original text
-    if start_index == -1:
-        return text
-
-    # Find the last line that is exactly ```
-    # We search backwards from the end of the list.
+    if start_index == -1: return text
     for i in range(len(lines) - 1, start_index, -1):
         if lines[i].strip() == "```":
             end_index = i
             break
-
-    # If a valid start and end fence are found, extract the content
     if end_index > start_index:
         print(f"  -> INFO: Markdown code fence detected and stripped.")
-        content_lines = lines[start_index + 1:end_index]
-        return "\n".join(content_lines)
-
-    # If anything is unclear, return the original text to be safe
+        return "\n".join(lines[start_index + 1:end_index])
     return text
 
 
 def is_path_safe(path_to_check: Path, project_root: Path) -> bool:
     """
     Ensures that the path is safely within the project root and not in .git.
-    This is a critical security sandbox.
     """
     try:
         resolved_path = (project_root / path_to_check).resolve()
@@ -91,17 +73,32 @@ def handle_delete(file_path: Path) -> None:
         print(f"  -> ERROR: Could not delete file: {e}", file=sys.stderr)
 
 
-def handle_patch(file_path: Path, patch_content: str) -> None:
-    """Handles applying a patch to an existing file."""
+def handle_patch(file_path: Path, patch_content: str, project_root: Path) -> None:
+    """Handles applying a patch to an existing file using the standard idiomatic approach."""
     print(f"[PATCH] Processing '{file_path}'...")
-    if not file_path.exists():
-        print(f"  -> ERROR: Cannot patch non-existent file.", file=sys.stderr)
+
+    # The file existence check remains a useful safeguard.
+    absolute_file_path = (project_root / file_path).resolve()
+    if not absolute_file_path.exists():
+        print(f"  -> ERROR: Cannot patch non-existent file: {absolute_file_path}", file=sys.stderr)
         return
 
     try:
+        # THE FINAL FIX: We REMOVE the explicit file_path from the arguments.
+        # Patch will determine the file to patch from the diff headers, which is the
+        # standard and most robust method when using stdin.
+        command_args = ['patch', '-p1', '--batch', '--forward', '--ignore-whitespace']
+
+        print(f"  -> [DEBUG] Executing command: {' '.join(command_args)}")
+        print(f"  -> [DEBUG] In working directory: {project_root}")
+
         result = subprocess.run(
-            ['patch', '--no-backup-if-mismatch', str(file_path)],
-            input=patch_content, text=True, check=True, capture_output=True
+            command_args,
+            input=patch_content,
+            text=True,
+            check=True,
+            capture_output=True,
+            cwd=project_root
         )
         print(f"  -> SUCCESS: Patch applied.")
         if result.stdout: print("     " + result.stdout.strip().replace('\n', '\n     '))
@@ -109,7 +106,13 @@ def handle_patch(file_path: Path, patch_content: str) -> None:
         print("  -> ERROR: The 'patch' command was not found.", file=sys.stderr)
     except subprocess.CalledProcessError as e:
         print(f"  -> ERROR: Patch could not be applied cleanly.", file=sys.stderr)
-        print("     Details: " + e.stderr.strip().replace('\n', '\n     '), file=sys.stderr)
+        print("\n     --- Details from 'patch' command (stdout) ---", file=sys.stderr)
+        if e.stdout and e.stdout.strip(): print("     " + e.stdout.strip().replace('\n', '\n     '), file=sys.stderr)
+        else: print("     (no output on stdout)", file=sys.stderr)
+        print("\n     --- Details from 'patch' command (stderr) ---", file=sys.stderr)
+        if e.stderr and e.stderr.strip(): print("     " + e.stderr.strip().replace('\n', '\n     '), file=sys.stderr)
+        else: print("     (no output on stderr)", file=sys.stderr)
+        print("     -------------------------------------------\n", file=sys.stderr)
 
 
 def process_input(content: str, project_root: Path) -> None:
@@ -117,10 +120,8 @@ def process_input(content: str, project_root: Path) -> None:
     command_pattern = re.compile(
         r"--- (START-FILE|START-PATCH|START-REPLACE-FILE|DELETE-FILE): (.+?) ---\n?"
         r"((?:.|\n)*?(?=--- END-))?"
-        r"(?:--- END-(?:FILE|PATCH|REPLACE-FILE): \2 ---\n?)?",
-        re.MULTILINE
+        r"(?:--- END-(?:FILE|PATCH|REPLACE-FILE): \2 ---\n?)?", re.MULTILINE
     )
-
     matches = list(command_pattern.finditer(content))
     if not matches:
         print("No valid command blocks found in the provided input.")
@@ -130,35 +131,28 @@ def process_input(content: str, project_root: Path) -> None:
     for match in matches:
         command, path_str, content = match.groups()
         file_path_relative = Path(path_str.strip())
-
         if not is_path_safe(file_path_relative, project_root):
             print(f"[SECURITY] DANGEROUS PATH! Skipping '{file_path_relative}'.", file=sys.stderr)
             continue
-
         content = content if content else ""
-
-        # Use the new, robust, line-based stripping function
         content = strip_markdown_fence(content)
-
         if command == 'START-FILE':
             handle_create_or_replace(file_path_relative, content, "CREATE")
         elif command == 'START-REPLACE-FILE':
             handle_create_or_replace(file_path_relative, content, "REPLACE")
         elif command == 'START-PATCH':
-            handle_patch(file_path_relative, content)
+            handle_patch(file_path_relative, content, project_root)
         elif command == 'DELETE-FILE':
             handle_delete(file_path_relative)
-
     print(f"\nProcessing complete.")
 
 
 def main() -> None:
     """Main execution loop."""
-    print("--- AI Companion Output Interpreter (Interactive & Secure) v2.4 ---")
+    print("--- AI Companion Output Interpreter (Interactive & Secure) v2.5 ---")
     project_root = Path.cwd().resolve()
     print(f"Project root locked to: {project_root}")
     print("-" * 60)
-
     while True:
         print("\nReady for input. Paste content below, then press Ctrl+D (or Ctrl+Z+Enter).")
         try:
@@ -171,7 +165,6 @@ def main() -> None:
         except EOFError:
             print("\nExiting.")
             break
-
 
 if __name__ == "__main__":
     main()
