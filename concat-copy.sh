@@ -280,8 +280,13 @@ make_tree_only() {
     echo "Project snapshot: $PROJECT_NAME"
     echo "Generated on: $($DATE_CMD $DATE_FMT)"
     echo
-    echo "== Directory Tree =="
+    # --- Directory Tree Section ---
+    echo "########## START SECTION: Directory Tree ##########"
+    echo
     make_tree
+    echo
+    echo "########## END SECTION: Directory Tree ##########"
+    echo
   }
 }
 
