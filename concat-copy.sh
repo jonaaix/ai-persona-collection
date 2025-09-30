@@ -42,7 +42,8 @@ EXTRA_EXCLUDES=(
   ".prettierrc"
   ".gitignore"
   "build-rembg"
-  "resources"
+  # Ignore only top-level resources/ directory
+  "^resources$"
   "release"
   "dist"
   "public"
@@ -260,6 +261,7 @@ make_full() {
     echo "########## START SECTION: File Contents ##########"
     # shellcheck disable=SC2016
     find . -type f \
+      | sed 's|^\./||' \
       | grep -Eiv -- "${EXCLUDE_PATTERN}" \
       | sort \
       | while IFS= read -r file; do
