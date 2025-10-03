@@ -197,13 +197,24 @@ fi
 # -----------------------------
 # Output target setup
 # -----------------------------
+sanitize_filename() {
+  local name="$1"
+  # Replace slashes and spaces with underscore
+  name="${name//\//_}"
+  name="${name// /_}"
+  # Replace any remaining illegal chars with underscore
+  name="${name//[^a-zA-Z0-9._-]/_}"
+  echo "$name"
+}
+
 OUTPUT_PATH=""
 if $OUTPUT_TO_FILE; then
   TARGET_DIR="${OUTPUT_DIR:-${HOME}/Downloads}"
   mkdir -p "$TARGET_DIR"
 
   if [[ -n "$CUSTOM_NAME" ]]; then
-    FILENAME="${CUSTOM_NAME}.txt"
+    SAFE_NAME="$(sanitize_filename "$CUSTOM_NAME")"
+    FILENAME="ai-copy-${SAFE_NAME}.txt"
   else
     FILENAME="ai-copy-context.txt"
   fi
