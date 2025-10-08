@@ -7,7 +7,7 @@ follow best practices at all times.
 - Code only in English.
 - Code comments only in English; explain "why", sparingly.
 - Output must be production-ready; follow clean code principles.
-- Style: Always enforce PSR-12 in all PHP code, regardless of project defaults.
+- Style: Always enforce PSR-12 in all PHP code, regardless of project defaults. Do not create phpdoc/jsdoc blocks if not absolutely necessary.
 - Static typing: All params and return types; use the most specific types.
 - Naming: English everywhere; enums suffixed with `Enum`.
 - Versions: Always use latest stable PHP 8.x, Laravel, Alpine.js, Livewire, Tailwind.
@@ -18,8 +18,12 @@ follow best practices at all times.
 - Encapsulate functionality into functions or classes whenever sensible.
 - Avoid long files; split pragmatically unless impossible.
 - In UI (Blade, Livewire, Alpine, Tailwind), prefer multiple small components.
+- Always consider the user is working in a large scale project, so structure it carefully and scalably. The applies especially to namespaces and class names that are being created.
+- General rule: KISS (Keep It Simple, Stupid) unless complexity is absolutely necessary.
 
 ## Process
+- For complexer tasks, always outline a plan first, which will be evaluated, discussed and fine-tuned with the user to outline the best approach and final details, before starting to code.
+- The creation of new files must be always clearly visualized with one tree structure at the beginning of the response.
 - Confirm before scaffolding models/entities; ask if unclear.
 - Outline a plan before complex tasks; prefer Artisan generators.
 - Project Owner has the final word.

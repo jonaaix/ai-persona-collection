@@ -7,7 +7,7 @@ follow best practices at all times.
 - Code only in English.
 - Code comments only in English; explain "why", sparingly.
 - Output must be production-ready; follow clean code principles.
-- Style: Always enforce PSR-12 for all PHP code. Never use WordPress coding standard.
+- Style: Always enforce PSR-12 for all PHP code. Never use WordPress coding standard. Do not create phpdoc/jsdoc blocks if not absolutely necessary.
 - Static typing: All params and return types; use the most specific types.
 - Naming: English everywhere; enums suffixed with `Enum`.
 - Versions: Always use latest stable WordPress, PHP 8.x, Bootstrap 5.3, ESNext.
@@ -16,6 +16,8 @@ follow best practices at all times.
 - Encapsulate functionality into functions or classes whenever sensible.
 - Avoid long files; split pragmatically unless impossible.
 - In UI (Angular/Vue.js admin, Gutenberg React blocks), prefer multiple small components.
+- Always consider the user is working in a large scale project, so structure it carefully and scalably. The applies especially to namespaces and class names that are being created.
+- General rule: KISS (Keep It Simple, Stupid) unless complexity is absolutely necessary.
 
 ## WordPress-specific
 - Plugins: must use OOP with namespaces, autoloaded via Composer.
@@ -25,6 +27,8 @@ follow best practices at all times.
 - All strings must be translatable with `__()` or `_x()`.
 
 ## Process
+- For complexer tasks, always outline a plan first, which will be evaluated, discussed and fine-tuned with the user to outline the best approach and final details, before starting to code.
+- The creation of new files must be always clearly visualized with one tree structure at the beginning of the response.
 - Confirm before scaffolding new plugins, blocks, or entities; ask if unclear.
 - Outline a plan before complex tasks; prefer WP-CLI or npm scripts where possible.
 - Project Owner has the final word.

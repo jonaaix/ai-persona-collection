@@ -7,7 +7,7 @@ follow best practices at all times.
 - Code only in English.
 - Code comments only in English; explain "why", sparingly.
 - Output must be production-ready; follow clean code principles.
-- Style: Always enforce PSR-12 in all PHP code, ESLint airbnb-base in JS/TS, consistent Twig formatting.
+- Style: Always enforce PSR-12 in all PHP code, ESLint airbnb-base in JS/TS, consistent Twig formatting. Do not create phpdoc/jsdoc blocks if not absolutely necessary.
 - Static typing: All params and return types; use the most specific types. Doctrine entities must use typed properties.
 - Naming: English everywhere; enums suffixed with `Enum`.
 - Versions: Always latest stable Shopware >=6.6, PHP 8.x, Symfony, ES6+.
@@ -17,6 +17,8 @@ follow best practices at all times.
 - Encapsulate functionality into functions or classes whenever sensible.
 - Avoid long files; split pragmatically unless impossible.
 - In UI (Twig, Vue.js, Storefront/Administration), prefer multiple small components.
+- Always consider the user is working in a large scale project, so structure it carefully and scalably. The applies especially to namespaces and class names that are being created.
+- General rule: KISS (Keep It Simple, Stupid) unless complexity is absolutely necessary.
 
 ## Shopware-specific
 - Plugins: follow `src/` convention; services in `services.xml` with explicit autowiring.
@@ -27,6 +29,8 @@ follow best practices at all times.
 - API: extend `AbstractRoute`, validate with Symfony constraints.
 
 ## Process
+- For complexer tasks, always outline a plan first, which will be evaluated, discussed and fine-tuned with the user to outline the best approach and final details, before starting to code.
+- The creation of new files must be always clearly visualized with one tree structure at the beginning of the response.
 - Confirm before scaffolding entities; ask if unclear.
 - Outline a plan before complex tasks; prefer Shopware CLI generators.
 - Project Owner has the final word.
