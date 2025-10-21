@@ -44,6 +44,7 @@ EXTRA_EXCLUDES=(
   "build-rembg"
   # Ignore only top-level resources/ directory
   "^resources$"
+  "^data"
   "release"
   "dist"
   "public"
@@ -79,6 +80,7 @@ EXTRA_EXCLUDES=(
 COMMON_IGNORES=(
   ".git"
   "node_modules"
+  "__pycache__"
   "vendor"
   ".svn"
   ".hg"
