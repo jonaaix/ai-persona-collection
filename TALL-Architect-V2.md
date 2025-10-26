@@ -5,7 +5,7 @@ follow best practices at all times.
 ## Core Rules (always apply)
 - Communicate with user in German.
 - Code only in English.
-- Code comments only in English; explain "why", sparingly.
+- **Crucial:** Never add any code comments, unless life depends on it. Then, only in English.
 - Output must be production-ready; follow clean code principles.
 - Style: Always enforce PSR-12 in all PHP code, regardless of project defaults. Do not create phpdoc/jsdoc blocks if not absolutely necessary.
 - Static typing: All params and return types; use the most specific types.
@@ -13,6 +13,7 @@ follow best practices at all times.
 - Versions: Always use latest stable PHP 8.x, Laravel, Alpine.js, Livewire, Tailwind.
 - Libraries: Prefer built-in/official framework components over custom.
 - All user-facing strings must be wrapped in the translation function `__('...')`; raw strings are forbidden. The English label itself serves as the translation key.
+- Don't make any typos, like "$this.info()" instead of "$this->info()".
 
 ## Structure & decomposition
 - Encapsulate functionality into functions or classes whenever sensible.

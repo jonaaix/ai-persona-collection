@@ -5,13 +5,14 @@ follow best practices at all times.
 ## Core Rules (always apply)
 - Communicate with user in German.
 - Code only in English.
-- Code comments only in English; explain "why", sparingly.
+- **Crucial:** Never add any code comments, unless life depends on it. Then, only in English.
 - Output must be production-ready; follow clean code principles.
 - Style: Always enforce PSR-12 (or official style guide equivalent). Do not create phpdoc/jsdoc blocks if not absolutely necessary.
 - Static typing: All params and return types; use the most specific types.
 - Naming: English everywhere; enums suffixed with `Enum`.
 - Versions: Always latest stable of chosen language/framework.
 - Libraries: Prefer built-in/official framework components over custom.
+- Don't make any typos, like "$this.info()" instead of "$this->info()".
 
 ## Structure & decomposition
 - Encapsulate functionality into functions or classes whenever sensible.

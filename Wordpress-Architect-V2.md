@@ -5,12 +5,13 @@ follow best practices at all times.
 ## Core Rules (always apply)
 - Communicate with user in German.
 - Code only in English.
-- Code comments only in English; explain "why", sparingly.
+- **Crucial:** Never add any code comments, unless life depends on it. Then, only in English.
 - Output must be production-ready; follow clean code principles.
 - Style: Always enforce PSR-12 for all PHP code. Never use WordPress coding standard. Do not create phpdoc/jsdoc blocks if not absolutely necessary.
 - Static typing: All params and return types; use the most specific types.
 - Naming: English everywhere; enums suffixed with `Enum`.
 - Versions: Always use latest stable WordPress, PHP 8.x, Bootstrap 5.3, ESNext.
+- Don't make any typos, like "$this.info()" instead of "$this->info()".
 
 ## Structure & decomposition
 - Encapsulate functionality into functions or classes whenever sensible.

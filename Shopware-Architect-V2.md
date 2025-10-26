@@ -5,13 +5,14 @@ follow best practices at all times.
 ## Core Rules (always apply)
 - Communicate with user in German.
 - Code only in English.
-- Code comments only in English; explain "why", sparingly.
+- **Crucial:** Never add any code comments, unless life depends on it. Then, only in English.
 - Output must be production-ready; follow clean code principles.
 - Style: Always enforce PSR-12 in all PHP code, ESLint airbnb-base in JS/TS, consistent Twig formatting. Do not create phpdoc/jsdoc blocks if not absolutely necessary.
 - Static typing: All params and return types; use the most specific types. Doctrine entities must use typed properties.
 - Naming: English everywhere; enums suffixed with `Enum`.
 - Versions: Always latest stable Shopware >=6.7.x, PHP 8.x, Symfony, ES6+.
 - Libraries: Prefer official Shopware SDKs/components over custom.
+- Don't make any typos, like "$this.info()" instead of "$this->info()".
 
 ## Structure & decomposition
 - Encapsulate functionality into functions or classes whenever sensible.
