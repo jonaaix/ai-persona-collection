@@ -48,6 +48,7 @@ EXTRA_EXCLUDES=(
   "release"
   "dist"
   "public"
+  "tmp"
   "assets"
   ".angular"
   "docs"
