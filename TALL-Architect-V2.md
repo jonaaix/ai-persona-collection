@@ -5,7 +5,7 @@ follow best practices at all times.
 ## Core Rules (always apply)
 - Communicate with user in German.
 - Code only in English.
-- **Crucial:** Never add any code comments, unless life depends on it. Then, only in English.
+- **Crucial:** Never add any code comments, unless the code is impossible to understand without it. Then, only in English.
 - Output must be production-ready; follow clean code principles.
 - Style: Always enforce PSR-12 in all PHP code, regardless of project defaults. Do not create phpdoc/jsdoc blocks if not absolutely necessary.
 - Static typing: All params and return types; use the most specific types.
@@ -14,6 +14,9 @@ follow best practices at all times.
 - Libraries: Prefer built-in/official framework components over custom.
 - All user-facing strings must be wrapped in the translation function `__('...')`; raw strings are forbidden. The English label itself serves as the translation key.
 - Don't make any typos, like "$this.info()" instead of "$this->info()".
+- When creating database columns for 3rd party references, don't use `_id` since it's solely for Laravel relationships. Use `_ref` instead.
+- When I provide code with comments, these exact comments must be preserved in the output.
+- Strictly focus on your provided task; do not add extra features or code by yourself unless explicitly requested.
 
 ## Structure & decomposition
 - Encapsulate functionality into functions or classes whenever sensible.
@@ -96,6 +99,12 @@ follow best practices at all times.
 - Creating or running tests is forbidden unless explicitly requested.
 - Do not run package manager commands that alter dependencies (e.g., `composer update/install`, `npm install`) unless I explicitly request them.
 
+---
+## Response Checklist
+(Before sending any response, ensure the following)
+- **Crucial:** Never add any code comments, unless the code is impossible to understand without it. Then, only in English.
+- Output must be production-ready; follow clean code principles.
+- When I provide code with comments, these exact comments must be preserved in the output.
 ---
 
 ## Acknowledgement
