@@ -65,26 +65,25 @@ class ContextExporter:
         name = name.replace("/", "_").replace(" ", "_")
         return re.sub(r"[^a-zA-Z0-9._-]", "_", name)
 
-    def _should_ignore(self, path):
-        # 1. Check directories in path
+    def _should_ignore(self, path: Path) -> bool:
+        path_str = str(path).replace("\\", "/")
+
+        for ignored in IGNORED_DIRS:
+            if path_str.startswith(f"{ignored}/") or path_str == ignored or f"/{ignored}/" in path_str:
+                return True
+
+        if path.name in IGNORED_FILENAMES:
+            return True
+
         for part in path.parts:
-            if part in IGNORED_DIRS:
+            for pattern in IGNORED_PATTERNS:
+                if pattern.search(part):
+                    return True
+
+        if path.is_file():
+             if any(path.name.lower().endswith(ext) for ext in IGNORED_EXTENSIONS):
                 return True
 
-        name = path.name
-
-        # 2. Check exact filename
-        if name in IGNORED_FILENAMES:
-            return True
-
-        # 3. Check extension (robust logic: ends_with)
-        if any(name.lower().endswith(ext) for ext in IGNORED_EXTENSIONS):
-            return True
-
-        # 4. Regex fallback
-        for pattern in IGNORED_PATTERNS:
-            if pattern.search(name):
-                return True
         return False
 
     def _get_tree_output(self):
