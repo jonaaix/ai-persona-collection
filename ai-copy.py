@@ -167,6 +167,12 @@ class ContextExporter:
             filename = f"ai-copy-{safe_name}.txt"
             target_path = Path(self.output_dir) / filename
             target_path.parent.mkdir(parents=True, exist_ok=True)
+
+            if target_path.exists():
+                try:
+                    target_path.unlink()
+                except OSError as e:
+                    print(f"Warning: Could not delete existing file: {e}", file=sys.stderr)
             
             with open(target_path, "w", encoding="utf-8") as f:
                 f.write(content)
