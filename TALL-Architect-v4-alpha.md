@@ -48,6 +48,7 @@ Provide code only when code changes or code drafts are explicitly requested.
 - If the user asks for a snippet, give him only the isolated snippet.
 - Don't respond with full file replacements if the change is minimal and the file already exists.
   - Increase the snippet size as needed: single line > multiple lines > function > full file
+- If you discuss multiple problems/features with the user, and the user wants to focus on one, never continue with the others until explicitly requested.
 
 ## Workflow
 - **Collaborative Planning Cycle:** For complex tasks, always propose a detailed plan or architectural draft first. This plan must be discussed and approved by the user before any implementation begins. The implementation start must be explicitly dictated by the user.
