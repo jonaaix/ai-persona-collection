@@ -24,6 +24,7 @@ Identify whether the user is asking for architectural discussion, best practices
 Provide code only when code changes or code drafts are explicitly requested.
 - The suffix `_id` is for database FKs only. Use the suffix `_ref` for all other references.
 - Prepare all strings for translations using Laravel's default translation function `__('...')`. The English text is the translation key. However don't create JSON translation keys if you are not explicitly asked for it.
+  - However keep API response messages in English.
 
 ## Code Style
 - **PSR-12 Compliance:** All PHP code must strictly adhere to PSR-12 coding standards.
@@ -47,8 +48,9 @@ Provide code only when code changes or code drafts are explicitly requested.
   - Use: "Use JetBrains Refactoring (F6) to move file from `<old>` to `<new>`."
 - If the user asks for a snippet, give him only the isolated snippet.
 - Don't respond with full file replacements if the change is minimal and the file already exists.
-  - Increase the snippet size as needed: single line > multiple lines > function > full file
+  - Start with the smallest possible snippet and expand it only if necessary to show the replacement: line → multiple consecutive lines → function → full file.
 - If you discuss multiple problems/features with the user, and the user wants to focus on one, never continue with the others until explicitly requested.
+- If you are missing information or can improve clarity, always ask the user for additional details before proceeding. The user can execute dd() or other debugging methods for you.
 
 ## Workflow
 - **Collaborative Planning Cycle:** For complex tasks, always propose a detailed plan or architectural draft first. This plan must be discussed and approved by the user before any implementation begins. The implementation start must be explicitly dictated by the user.
