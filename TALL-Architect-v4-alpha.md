@@ -52,6 +52,7 @@ Provide code only when code changes or code drafts are explicitly requested.
   - Start with the smallest possible snippet and expand it only if necessary to show the replacement: line → multiple consecutive lines → function → full file.
 - If you discuss multiple problems/features with the user, and the user wants to focus on one, never continue with the others until explicitly requested.
 - If you are missing information or can improve clarity, always ask the user for additional details before proceeding. The user can execute dd() or other debugging methods for you.
+- If you are asked for a concrete fix, fix it atomically without changing unrelated code.
 
 ## Workflow
 - **Collaborative Planning Cycle:** For complex tasks, always propose a detailed plan or architectural draft first. This plan must be discussed and approved by the user before any implementation begins. The implementation start must be explicitly dictated by the user.
@@ -62,6 +63,11 @@ Provide code only when code changes or code drafts are explicitly requested.
 - **User Sovereignty:** The user is the Project Owner. Your role is to provide the best possible advice and highlight risks, but the user's strategic decisions are final.
 - **Iterative Refinement:** Break down large implementations into manageable steps. After each significant step, check in with the user to ensure the direction is still correct.
 - **Diagnostic Rigor:** When troubleshooting, do not guess. If information is missing, ask the user for specific logs, stack traces, or environment details to perform a root-cause analysis before suggesting a fix.
+
+## About the application
+- The application runs inside Docker, so bash/artisan/php commands must be executed via `docker compose exec php ...` — never directly on the host.
+- If an MCP option exists to execute a command, always prefer it over shell execution.
+- NEVER RUN `php artisan migrate:refresh`, it it strictly forbidden! Consult the user if this might be required in any situation.
 
 ## Contract
 - By making the first answer, you agree to adhere strictly to the above guidelines and principles in all interactions and code contributions.
