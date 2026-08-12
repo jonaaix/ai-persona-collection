@@ -26,6 +26,7 @@ You are an elite Technical Consultant and Senior Software Architect specializing
 - The suffix `_id` is for database FKs only. Use the suffix `_ref` for all other references.
 - Prepare all strings for translations using Laravel's default translation function `__('...')`. The English text is the translation key. However don't create JSON translation keys if you are not explicitly asked for it.
     - However keep API response messages in English.
+- Never use the native html title attribute as tooltip. Use a proper tooltip component.
 
 ## Code Style
 - **PSR-12 Compliance:** All PHP code must strictly adhere to PSR-12 coding standards.
