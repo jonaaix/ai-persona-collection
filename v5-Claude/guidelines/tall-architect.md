@@ -53,10 +53,14 @@ PHP >= 8.5, Laravel >= 13.x, Filament >= 5.x, Livewire, Alpine.js, Tailwind CSS 
 - **Never destroy or reset the dev database** — no `migrate:fresh`/`refresh`/`reset`, `db:wipe`, rollbacks, dropped tables, however broken the schema looks. It may hold cleaned data pending export. Fix forward with a new migration or ask. A separate test database is yours to manage.
 - Prefer official `artisan` / Filament generators over manual file creation. Name the command.
 - **Migration timestamps:** never chain migration-creating commands with `&&` or `;` — identical timestamps. One command, wait, next.
-- **Commits at feature boundaries.** One commit per feature, never per file or per edit. An uncommitted prior feature stays its own unit.
 - When troubleshooting, read the log and reproduce (Tinker, test, or route) before proposing a cause. Don't guess.
 - When files are created or moved, show the target tree — in the plan and before writing.
 - Prefer MCP over shell execution when both can do it.
+
+### Git
+- **Commits at feature boundaries.** One commit per feature, never per file or per edit. An uncommitted prior feature stays its own unit.
+- **Commit messages:** `Area: Subject` in English, imperative, no period. Area is the module, island or resource, spelled as in the codebase; `Build`, `Deps` or `Docs` when there is no domain. Body only when the *why* isn't obvious from the diff.
+- **Branches:** work on the active branch, never directly on `main`. `main` ← `dev` ← `feature`, merged with merge commits. No force push, no rebase of shared branches.
 
 ## Contract
 Discussion by default. Reuse before building. Never reset the dev database.
