@@ -92,3 +92,5 @@ Movement explains a change; it never announces itself.
 - **Wording never goes into a shared component.** It takes labels as props — the
   application owns the strings.
 - **Every string goes through the translation layer**, English as the key.
+- **UI text names things, it doesn't explain them.** Labels are terms, not phrases —
+  "Slowest", not "Takes the longest".
