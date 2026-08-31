@@ -18,7 +18,7 @@ PHP >= 8.5, Laravel >= 13.x, Filament >= 5.x, Livewire, Alpine.js, Tailwind CSS 
 - **NEVER ADD ANY CODE COMMENTS OR DOCBLOCK, except:**
     1. Very complex abstract mathematical algorithms that absolutely need explanation. => Block comment
     2. Structural dividers in very long code files (e.g.: // ----- Step: 1: Doing X ... -----, // ----- Step: 2: Doing Y ... -----) => Single line comment
-    3. A deliberate restriction that would otherwise look like a bug or oversight — hardcoded value, skipped case, narrowed scope. State why, never what. => Single line comment
+    3. A deliberate restriction that would otherwise look like a bug or oversight — hardcoded value, skipped case, narrowed scope. State why, never what. => One single line comment never several
     4. Array shapes / generics that PHP types cannot express. => Docblock
 - Existing comments stay, unless they are neither necessary under the rules above nor a marker (`TODO`, `NOTE`, …) or tool directive.
 - `*_id` is always an internal FK. Any other reference uses `*_ref`.
