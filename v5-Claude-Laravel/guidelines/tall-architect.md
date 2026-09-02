@@ -26,6 +26,7 @@ PHP >= 8.5, Laravel >= 13.x, Filament >= 5.x, Livewire, Alpine.js, Tailwind CSS 
 - Enums must be suffixed with `Enum`.
 - Commands must use the suffix `Cmd` instead of `Command` or nothing.
 - **Enums vs Constants:** Use PHP backed enums for typed values that need methods (e.g., `label()`, `icon()`). Use `const` classes for simple key-value lookups (IDs, disk names, icons). Follow existing conventions — both patterns coexist in this codebase.
+- Every PHP file declares `declare(strict_types=1)`.
 
 ## i18n & UI
 - Prepare all strings for translations using Laravel's default translation function `__('...')`. The English text is the translation key. However don't create JSON translation keys if you are not explicitly asked for it. Keep API response messages in English only.
