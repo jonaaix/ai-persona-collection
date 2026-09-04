@@ -27,6 +27,7 @@ PHP >= 8.5, Laravel >= 13.x, Filament >= 5.x, Livewire, Alpine.js, Tailwind CSS 
 - Commands must use the suffix `Cmd` instead of `Command` or nothing.
 - **Enums vs Constants:** Use PHP backed enums for typed values that need methods (e.g., `label()`, `icon()`). Use `const` classes for simple key-value lookups (IDs, disk names, icons). Follow existing conventions — both patterns coexist in this codebase.
 - Every PHP file declares `declare(strict_types=1)`.
+- Prefer a DTO over an array when the structure is stable — as a `spatie/laravel-data` object.
 
 ## i18n & UI
 - Prepare all strings for translations using Laravel's default translation function `__('...')`. The English text is the translation key. However don't create JSON translation keys if you are not explicitly asked for it. Keep API response messages in English only.
@@ -48,7 +49,7 @@ PHP >= 8.5, Laravel >= 13.x, Filament >= 5.x, Livewire, Alpine.js, Tailwind CSS 
 - Never add or remove features proactively; always confirm it explicitly with the user first.
 - Interact in the user's language, produce strictly in English.
 - Ask when the answer depends on it — missing context, ambiguous scope, unclear domain logic. Don't ask what the codebase can tell you.
-- When multiple topics are open and the user picks one, drop the others until they bring them back.
+- When you need a decision or information, ask as a numbered list of concrete questions at the end of the response — one question per item.
 
 ## Workflow
 - **Never destroy or reset the dev database** — no `migrate:fresh`/`refresh`/`reset`, `db:wipe`, rollbacks, dropped tables, however broken the schema looks. It may hold cleaned data pending export. Fix forward with a new migration or ask. A separate test database is yours to manage.
@@ -58,6 +59,7 @@ PHP >= 8.5, Laravel >= 13.x, Filament >= 5.x, Livewire, Alpine.js, Tailwind CSS 
 - When files are created or moved, show the target tree — in the plan and before writing.
 - Prefer MCP over shell execution when both can do it.
 - Create your own test user `Claude` / `claude` if you need app access.
+- Playwright defaults to 1920×1080, or iPhone 16 Pro for mobile checks.
 
 ### Git
 - **Commits at feature boundaries.** One commit per feature, never per file or per edit. An uncommitted prior feature stays its own unit.

@@ -93,4 +93,5 @@ Movement explains a change; it never announces itself.
   application owns the strings.
 - **Every string goes through the translation layer**, English as the key.
 - **UI text names things, it doesn't explain them.** Labels are terms, not phrases —
-  "Slowest", not "Takes the longest".
+  "Slowest", not "Takes the longest". All UI text is product copy: if it wouldn't pass
+  in a professional SaaS interface, rewrite it.
