@@ -15,13 +15,14 @@ Explicit instruction only. Ambiguous → ask. After the change, back to discussi
 - **NEVER ADD ANY CODE COMMENTS OR DOCBLOCK, except:**
     1. Very complex abstract mathematical algorithms that absolutely need explanation. => Block comment
     2. Structural dividers in very long code files (e.g.: // ----- Step: 1: Doing X ... -----, // ----- Step: 2: Doing Y ... -----) => Single line comment
-    3. A deliberate restriction that would otherwise look like a bug or oversight — hardcoded value, skipped case, narrowed scope. State why, never what. => Single line comment
+    3. A deliberate restriction that would otherwise look like a bug or oversight — hardcoded value, skipped case, narrowed scope. State why, never what. => One single line comment never several
     4. Type information the language cannot express (array shapes, generics). => Docblock
-- If code needs a comment to be understood, rename until it doesn't.
-- Comments in code the user wrote stay untouched. Comments you wrote in an earlier turn are yours to remove.
+- Existing comments stay, unless they are neither necessary under the rules above nor a marker (`TODO`, `NOTE`, …) or tool directive.
 - `*_id` is always an internal FK. Any other reference uses `*_ref`.
 - Class names carry their kind as a suffix, spelled the way the project already spells it.
-- Typed value sets that need behaviour are enums; flat key-value lookups are constants. Follow existing conventions.
+- **Enums vs Constants:** Typed value sets that need behaviour (e.g. `label()`, `icon()`) are enums. Flat key-value lookups (IDs, disk names, icons) are constants. Follow existing conventions.
+- Use the language's strictest typing mode, in every file that supports it.
+- Prefer a DTO over an array when the structure is stable.
 
 ## i18n & UI
 - All user-facing strings go through the translation layer, the English text as the key. Don't create translation files unless explicitly asked. API response messages stay English.
@@ -43,7 +44,7 @@ Explicit instruction only. Ambiguous → ask. After the change, back to discussi
 - Never add or remove features proactively; always confirm it explicitly with the user first.
 - Interact in the user's language, produce strictly in English.
 - Ask when the answer depends on it — missing context, ambiguous scope, unclear domain logic. Don't ask what the codebase can tell you.
-- When multiple topics are open and the user picks one, drop the others until they bring them back.
+- When you need a decision or information, ask as a numbered list of concrete questions at the end of the response — one question per item.
 
 ## Workflow
 - **Never destroy or reset the dev database** — no destructive migrations, wipes, rollbacks or dropped tables, however broken the schema looks. It may hold cleaned data pending export. Fix forward with a new migration or ask. A separate test database is yours to manage.
@@ -53,10 +54,11 @@ Explicit instruction only. Ambiguous → ask. After the change, back to discussi
 - When files are created or moved, show the target tree — in the plan and before writing.
 - Prefer MCP over shell execution when both can do it.
 - Create your own test user `Claude` / `claude` if you need app access.
+- Playwright defaults to 1920×1080, or iPhone 16 Pro for mobile checks.
 
 ### Git
 - **Commits at feature boundaries.** One commit per feature, never per file or per edit. An uncommitted prior feature stays its own unit.
-- **Commit messages:** `Area: Subject` in English, imperative, no period. Area is the module, island or resource, spelled as in the codebase; `Build`, `Deps` or `Docs` when there is no domain. Body only when the *why* isn't obvious from the diff.
+- **Commit messages:** `Area: Subject` in English, imperative, no period. Area is the module or resource, spelled as in the codebase; `Build`, `Deps` or `Docs` when there is no domain. Body only when the *why* isn't obvious from the diff.
 - **Branches:** work on the active branch, never directly on `main`. `main` ← `dev` ← `feature`, merged with merge commits. No force push, no rebase of shared branches.
 
 ## Contract

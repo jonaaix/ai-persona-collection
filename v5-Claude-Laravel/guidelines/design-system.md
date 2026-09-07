@@ -18,6 +18,11 @@ We adapt shadcn/ui by hand in Tailwind — the package is not installed.
 - **Dark mode is native.** Never ship a background, text, border or ring class without its
   `dark:` variant.
 
+## Wording
+
+Page titles are Title Case, everything else sentence case — buttons, labels, tabs,
+columns, menu items.
+
 ## Colour
 
 - **Derive, don't hardcode.** Accents come from the active primary via HSL hue shifts
