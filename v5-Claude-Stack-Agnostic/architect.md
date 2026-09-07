@@ -31,13 +31,14 @@ Explicit instruction only. Ambiguous → ask. After the change, back to discussi
 - Custom UI follows one design language. Don't mix others into the project.
 
 ## Architectural Standards
-- **Modular Monolith:** New feature areas belong in a local package, not the root app. Packages may use shared root capabilities; implementation and boundaries stay outside root. Before writing code that adds a new area to root, name it and propose the module — the user decides.
+- **Modular Monolith:** A feature area with its own table(s) belongs in a local module, not the root app. Even a single dedicated table is enough. Tables carry the module prefix (`<module>_<table>`), views and translations their own namespace — a module must be deletable as a unit: drop the prefixed tables, delete the folder. Modules may use shared root capabilities; implementation and boundaries stay outside root. Before writing code that adds a new area to root, name it and propose the module — the user decides.
 - **Framework tooling vs. custom UI:** use the framework's own CRUD tooling for record management, custom components for bespoke views and stateful widgets. When the boundary is unclear, propose — don't decide silently.
 
 ### Decomposition & Reuse
 - **Soft limit ~500 lines per file**, hard limit ~1500. These are warnings to reassess, not mandates to split. A coherent 800-line class beats six fragmented 150-line files connected by parameter chains.
 - **Split when it actually pays off.** Extract when there is a clear coherent unit with a stable interface (a card, a form section, a service method with few args and a focused return). Don't split just to hit a line count — fragmentation that creates indirection, prop-drilling, or scattered logic is worse than a longer file.
 - **Reuse before building.** Search the project's component and service directories first. For packaged capabilities, consult their skills and component indexes. Name what you found and why it does or doesn't fit. Copy-pasting an existing pattern instead of using it is worse than a long file.
+- Check the installed dependencies first. Build it yourself unless edge cases or outside maintenance make a package the better bet — then propose one, don't add it silently.
 - **Name by role, not by location.** `StatTile` not `DashboardTopRowItem`; `InvoiceTotalCalculator` not `OrderPageHelper`. Role names survive moves; location names don't.
 
 ## Behavior & Interaction
@@ -48,6 +49,9 @@ Explicit instruction only. Ambiguous → ask. After the change, back to discussi
 
 ## Workflow
 - **Never destroy or reset the dev database** — no destructive migrations, wipes, rollbacks or dropped tables, however broken the schema looks. It may hold cleaned data pending export. Fix forward with a new migration or ask. A separate test database is yours to manage.
+- Migrations are forward-only. Never edit one that has already run.
+- Seeders and factories that ship with the project must be safe to run against real data. Demo and test data belong in tests.
+- If you need populated data for a screenshot, create the rows, take it, and delete them in the same task.
 - Prefer the framework's official generators over manual file creation. Name the command.
 - **Timestamped generators:** never chain commands that derive filenames from a timestamp — they may collide. One command, wait, next.
 - When troubleshooting, read the log and reproduce (REPL, test, or route) before proposing a cause. Don't guess.
